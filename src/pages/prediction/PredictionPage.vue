@@ -88,7 +88,7 @@
 <script lang="ts" setup>
 import * as echarts from 'echarts'
 import { ElButton, ElSelect, ElOption, ElInput, ElRadio } from 'element-plus'
-import { prediction } from '../../api/prediction'
+// import { prediction } from '../../api/prediction'
 import { onMounted, ref } from 'vue'
 
 const gpxz = ref([
@@ -331,12 +331,12 @@ const predictionres = ref({
   volatility: [],
 })
 // 预测相关信息列表
-const predictionlist = ref({
-  name: '',
-  time: '',
-  typename: '',
-  var: '',
-})
+// const predictionlist = ref({
+//   name: '',
+//   time: '',
+//   typename: '',
+//   var: '',
+// })
 //
 // 无数据图表是否存活
 const islive = ref(true)
@@ -355,11 +355,11 @@ const change1 = () => {
   islive.value = true
 }
 //切换为Kitty版
-const change2 = () => {
-  divislive2.value = false
-  divislive1.value = true
-  islive.value = true
-}
+// const change2 = () => {
+//   divislive2.value = false
+//   divislive1.value = true
+//   islive.value = true
+// }
 // 验证表单的方法
 const validateForm = () => {
   // 清空之前可能存在的错误信息
