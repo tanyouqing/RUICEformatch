@@ -13,6 +13,7 @@
     <div v-if="isEmptyMessage" class="empty-message">请输入内容后搜索</div>
     <div v-if="answers.length > 0" class="answers-container">
       <div v-for="(answer, index) in displayedAnswers" :key="index" class="answer">
+        <!-- eslint-disable vue/no-v-html -->
         <div v-html="parseMarkdown(answer)"></div>
       </div>
       <button v-if="hasMore" @click="loadMore" class="load-more-button">加载更多</button>

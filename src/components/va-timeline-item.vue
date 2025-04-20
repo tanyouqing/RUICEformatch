@@ -11,9 +11,9 @@
       </div>
     </td>
     <td class="va-timeline-item__date-cell">
-      <slot name="date">
+      <template #date>
         {{ $props.date }}
-      </slot>
+      </template>
     </td>
   </tr>
 </template>

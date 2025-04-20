@@ -55,7 +55,10 @@ onMounted(async () => {
           border
           style="margin-top: 10px"
         >
-          <ElDescriptionsItem v-for="item in formed_indices.list" align="center">
+          <ElDescriptionsItem
+            v-for="item in formed_indices.list"
+            :key="item.index_name"
+            align="center">
             <template #label>
               <div class="cell-item" style="width: 130px">
                 {{ key2text[item.index_name] }}

@@ -27,6 +27,7 @@
     <!-- 显示答案 -->
     <div v-if="answers.length > 0" class="answers-container">
       <article v-for="(answer, index) in displayedAnswers" :key="index" class="answer">
+        <!-- eslint-disable vue/no-v-html -->
         <div v-html="parseMarkdown(answer)"></div>
       </article>
 

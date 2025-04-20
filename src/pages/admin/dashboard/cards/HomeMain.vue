@@ -7,13 +7,13 @@
       <div class="left-part">
         <ElTabs type="border-card" style="width: 700px">
           <ElTabPane label="市值TOP10">
-            <StockOrderedTable :top10_list="top10_list.cap" />
+            <StockOrderedTable :top10List="top10List.cap" />
           </ElTabPane>
           <ElTabPane label="增长量TOP10">
-            <StockOrderedTable :top10_list="top10_list.amt" />
+            <StockOrderedTable :top10List="top10List.amt" />
           </ElTabPane>
           <ElTabPane label="增长率TOP10">
-            <StockOrderedTable :top10_list="top10_list.rate" />
+            <StockOrderedTable :top10List="top10List.rate" />
           </ElTabPane>
         </ElTabs>
         <div style="margin-top: 50px">
@@ -41,7 +41,7 @@ import httpInstance from '../../../../http'
 // let top10_cap_list = reactive({})
 // let top10_growth_rate_list = reactive({})
 // let top10_growth_amt_list = reactive({})
-const top10_list = reactive({
+const top10List = reactive({
   cap: [],
   rate: [],
   amt: [],
@@ -68,9 +68,9 @@ onMounted(async () => {
     }
   }
 
-  top10_list.cap = stockListData.top_10_market_cap.map(filer)
-  top10_list.rate = stockListData.top_10_growth_rate.map(filer)
-  top10_list.amt = stockListData.top_10_growth_amount.map(filer)
+  top10List.cap = stockListData.top_10_market_cap.map(filer)
+  top10List.rate = stockListData.top_10_growth_rate.map(filer)
+  top10List.amt = stockListData.top_10_growth_amount.map(filer)
   //process
 })
 </script>

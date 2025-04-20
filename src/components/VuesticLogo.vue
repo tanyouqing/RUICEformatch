@@ -111,14 +111,13 @@ const { getColor } = useColors()
 
 const props = withDefaults(
   defineProps<{
-    height?: number
-    start?: string
-    end?: string
+    height?: number // 可选的数字类型
+    start?: string  // 可选的字符串类型
+    end?: string    // 可选的字符串类型
   }>(),
   {
-    height: 100,
-    start: 'primary',
-    end: undefined,
+    height: 100,    // 默认高度为 100
+    start: '',      // 默认值为空字符串（或根据业务需求调整）
   },
 )
 
