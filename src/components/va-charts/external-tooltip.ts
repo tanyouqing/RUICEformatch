@@ -105,7 +105,7 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
   tooltipEl.style.opacity = '1'
   tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px'
 
-  // @ts-ignore
+  // @ts-expect-error
   computePosition(chart.canvas.parentNode! as HTMLElement, tooltipEl!, {
     placement: 'top',
     middleware: [flip(), shift()],
