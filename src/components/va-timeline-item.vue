@@ -7,7 +7,6 @@
     </td>
     <td class="va-timeline-item__content-cell">
       <div class="va-timeline-item__content">
-        <slot />
       </div>
     </td>
     <td class="va-timeline-item__date-cell">
