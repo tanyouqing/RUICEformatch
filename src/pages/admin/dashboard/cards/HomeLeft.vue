@@ -54,7 +54,11 @@ const toViewStock = () => {
         <p>{{ wholeName }}</p>
 
         <ElCard shadow="hover" class="card" style="height: 300px; overflow: auto">
-          <ElRow v-for="stock in stockList" style="justify-content: center; margin-bottom: 10px">
+          <ElRow
+            v-for="(stock, index) in stockList"
+            :key="index"
+            style="justify-content: center; margin-bottom: 10px"
+          >
             <ElLink @click="() => (selectedStock = stock)"> {{ stock }}</ElLink>
           </ElRow>
         </ElCard>

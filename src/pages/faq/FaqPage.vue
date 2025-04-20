@@ -20,7 +20,7 @@
 import { ref } from 'vue'
 import Categories from './widgets/Categories.vue'
 import Questions from './widgets/Questions.vue'
-import kimi from './questions.vue'
+// import kimi from './questions.vue'
 
 const isModalVisible = ref(false)
 
