@@ -1,3 +1,46 @@
+<script lang="ts" setup>
+import categories from '../data/popularCategories.json'
+import { ref, computed, onMounted } from 'vue'
+
+// 显式定义接口，描述 category 的结构
+interface Category {
+  id: number
+  icon: string
+  name: string
+  intro: string
+}
+
+// 为 allCategories 和 displayedCategories 显式指定类型
+const searchValue = ref('')
+const allCategories = ref<Category[]>(categories)
+const displayedCategories = ref<Category[]>([])
+
+// 随机选取九个术语显示
+onMounted(() => {
+  shuffleCategories()
+})
+
+const shuffleCategories = () => {
+  // 修改前：未明确类型
+  // 修改后：通过接口定义确保类型安全
+  const shuffled = allCategories.value.sort(() => Math.random() - 0.5).slice(0, 9)
+  displayedCategories.value = shuffled as Category[]
+}
+
+// 计算属性，根据搜索值过滤所有术语
+const filteredCategories = computed(() => {
+  const value = searchValue.value.trim().toLowerCase()
+  if (value.length === 0) {
+    return displayedCategories.value
+  }
+  // 修改前：未明确类型
+  // 修改后：通过接口定义确保类型安全
+  return allCategories.value.filter((category: Category) => {
+    return category.intro.toLowerCase().includes(value) || category.name.toLowerCase().includes(value)
+  })
+})
+</script>
+
 <template>
   <VaInput v-model="searchValue" class="mb-4" placeholder="Search">
     <template #appendInner>
@@ -19,38 +62,7 @@
     No matches found. Try refining your search or browse through the categories to find the help you need.
   </VaAlert>
   <button class="btn" @click="shuffleCategories" style="margin-bottom: 1rem;">换一批</button>
-
 </template>
-
-<script lang="ts" setup>
-import categories from '../data/popularCategories.json'
-import { ref, computed, onMounted } from 'vue'
-
-const searchValue = ref('')
-const allCategories = ref(categories)
-const displayedCategories = ref([])
-
-// 随机选取九个术语显示
-onMounted(() => {
-  shuffleCategories()
-})
-
-const shuffleCategories = () => {
-  const shuffled = allCategories.value.sort(() => Math.random() - 0.5).slice(0, 9)
-  displayedCategories.value = shuffled
-}
-
-// 计算属性，根据搜索值过滤所有术语
-const filteredCategories = computed(() => {
-  const value = searchValue.value.trim().toLowerCase()
-  if (value.length === 0) {
-    return displayedCategories.value
-  }
-  return allCategories.value.filter((category) => {
-    return category.intro.toLowerCase().includes(value) || category.name.toLowerCase().includes(value)
-  })
-})
-</script>
 
 <style>
 .btn {

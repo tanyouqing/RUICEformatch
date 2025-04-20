@@ -12,8 +12,10 @@ export default defineConfig({
   },
   plugins: [
     vuestic({
-      devtools: true,
-      cssLayers: true,
+      options: {
+        devtools: true,
+        cssLayers: true,
+      },
     }),
     vue(),
     VueI18nPlugin({

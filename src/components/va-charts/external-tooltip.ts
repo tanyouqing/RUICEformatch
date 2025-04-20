@@ -44,11 +44,11 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
   // Set Text
   if (tooltip.body) {
     const titleLines = tooltip.title || []
-    const bodyLines = tooltip.body.map((b) => b.lines)
+    const bodyLines = tooltip.body.map((b: { lines: any }) => b.lines)
 
     const tableHead = document.createElement('thead')
 
-    titleLines.forEach((title) => {
+    titleLines.forEach((title: string) => {
       const tr = document.createElement('tr')
       tr.style.borderWidth = '0'
 
@@ -62,7 +62,7 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
     })
 
     const tableBody = document.createElement('tbody')
-    bodyLines.forEach((body, i) => {
+    bodyLines.forEach((body: any, i: string | number) => {
       const colors = tooltip.labelColors[i]
 
       const span = document.createElement('span')
@@ -105,6 +105,7 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
   tooltipEl.style.opacity = '1'
   tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px'
 
+  // @ts-ignore
   computePosition(chart.canvas.parentNode! as HTMLElement, tooltipEl!, {
     placement: 'top',
     middleware: [flip(), shift()],

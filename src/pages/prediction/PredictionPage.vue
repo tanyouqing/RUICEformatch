@@ -90,8 +90,17 @@ import * as echarts from 'echarts'
 import { ElButton, ElSelect, ElOption, ElInput, ElRadio } from 'element-plus'
 // import { prediction } from '../../api/prediction'
 import { onMounted, ref } from 'vue'
+// 定义接口，为项目类型添加显式类型定义
+interface StockOption {
+  value: string
+  label: string
+}
 
-const gpxz = ref([
+interface PredictionResult {
+  close_price: number[]
+  volatility: number[]
+}
+const gpxz = ref<StockOption[]>([
   {
     value: 'AAPL',
     label: '苹果公司（Apple Inc.）',
@@ -297,16 +306,16 @@ const gpxz = ref([
     label: '高露洁棕榄（Colgate-Palmolive）',
   },
 ])
-const value = ref('') /* 记录股票选择 */
+const value = ref<string>('') /* 记录股票选择 */
 //记录div是否存活
 
-const divislive1 = ref(false)
+const divislive1 = ref<boolean>(false)
 
-const divislive2 = ref(true)
+const divislive2 = ref<boolean>(true)
 // 记录预测时间
-const ptimevalue = ref('')
+const ptimevalue = ref<string>('')
 // 模型数据
-const model = ref([
+const model = ref<StockOption[]>([
   {
     value: 'XGBoost',
     label: 'XGBoost',
@@ -321,12 +330,12 @@ const model = ref([
   },
 ])
 // 记录模型选择
-const modelvalue = ref('')
+const modelvalue = ref<string>('')
 // 波动率分析选择
-const radio = ref('1')
+const radio = ref<string>('1')
 
 // 预测结果数据
-const predictionres = ref({
+const predictionres = ref<PredictionResult>({
   close_price: [],
   volatility: [],
 })
@@ -339,15 +348,15 @@ const predictionres = ref({
 // })
 //
 // 无数据图表是否存活
-const islive = ref(true)
+const islive = ref<boolean>(true)
 // 预测的图标是否显示
-const islive2 = ref(false)
+const islive2 = ref<boolean>(false)
 // 股票选择框错误信息
-const gpxzError = ref('')
+const gpxzError = ref<string>('')
 // 预测时间框错误信息
-const ptimeError = ref('')
+const ptimeError = ref<string>('')
 // 模型选择框错误信息
-const modelError = ref('')
+const modelError = ref<string>('')
 //切换为商务版
 const change1 = () => {
   divislive1.value = false
@@ -422,7 +431,7 @@ const prediction1 = async () => {
     console.log(2)
     predictionres.value.close_price = result[0]['close_price']
     predictionres.value.volatility = result[1]['volatility']
-    predictionres.value.volatility[0] = ''
+    predictionres.value.volatility[0] = null
     // 初始化其他逻辑
     initdiv()
     islive.value = false
@@ -435,8 +444,9 @@ const initdiv = () => {
 
   // 修正此处，使用ptimevalue.value获取预测时间来生成xData
   const xData = []
-  for (let i = 0; i < ptimevalue.value; i++) {
-    xData[i] = i
+  const ptimeNum = parseInt(ptimevalue.value)
+  for (let i = 0; i < ptimeNum; i++) {
+    xData.push(i)
   }
 
   // 修正此处，先判断predictionres.value.close_price是否为空数组，再进行赋值操作
@@ -460,9 +470,11 @@ const initdiv = () => {
     }
   }
 
-  const chazhi = maxValue - minValue + 1
-  maxValue = maxValue + chazhi
-  minValue = minValue - chazhi
+  if (minValue !== null && maxValue !== null) {
+    const chazhi = maxValue - minValue + 1
+    maxValue = maxValue + chazhi
+    minValue = minValue - chazhi
+  }
   maxValue = parseInt(maxValue)
   minValue = parseInt(minValue)
   const option = {
@@ -526,9 +538,7 @@ const initdiv = () => {
         },
         axisLabel: {
           // 原来的formatter可能是"{value}"，修改如下
-          formatter: function (value) {
-            return value.toFixed(2)
-          },
+          formatter: (value: number) => value.toFixed(2),
         },
       },
     ],

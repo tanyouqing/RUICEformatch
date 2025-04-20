@@ -4,25 +4,34 @@ import { VaCard } from 'vuestic-ui'
 import { computed, ref } from 'vue'
 import { store } from '../../../../stores/store'
 
-const selectedStock = ref(null)
+// 修改前：selectedStock 被定义为 ref(null)，导致索引类型错误
+// 修改后：显式定义 selectedStock 的类型为 string | null
+const selectedStock = ref<string | null>(null)
+
+// 修改前：直接使用 selectedStock.value 作为索引，可能存在 null 值
+// 修改后：使用可选链操作符避免直接访问可能为 null 的值
+const wholeName = computed(() => store.stockMap[selectedStock.value ?? ''])
+
 const stockList = computed(() => Object.keys(store.stockMap))
-// 获取登陆数据
-const wholeName = computed(() => store.stockMap[selectedStock.value])
-//跳转登录页
+
 const router = useRouter()
+
 const toBackTest = () => {
   router.push({
     path: '/auth/login',
   })
 }
+
 const toViewStock = () => {
-  const rt = router.resolve({
-    name: 'stock',
-    query: {
-      ticker: selectedStock.value,
-    },
-  })
-  window.open(rt.href, '_blank')
+  if (selectedStock.value) {
+    const rt = router.resolve({
+      name: 'stock',
+      query: {
+        ticker: selectedStock.value,
+      },
+    })
+    window.open(rt.href, '_blank')
+  }
 }
 </script>
 
@@ -41,7 +50,6 @@ const toViewStock = () => {
           </ElCol>
         </ElRow>
         <div style="height: 20px"></div>
-        <!-- 显示一些状态 -->
         <div class="card-header">
           <h3>股票列表</h3>
         </div>
@@ -59,7 +67,9 @@ const toViewStock = () => {
             :key="index"
             style="justify-content: center; margin-bottom: 10px"
           >
-            <ElLink @click="() => (selectedStock = stock)"> {{ stock }}</ElLink>
+            <!-- 修改前：直接将 stock 赋值给 selectedStock，类型不匹配 -->
+            <!-- 修改后：显式转换类型 -->
+            <ElLink @click="() => (selectedStock = stock as string)"> {{ stock }}</ElLink>
           </ElRow>
         </ElCard>
       </div>
