@@ -40,7 +40,9 @@ onMounted(async () => {
         </VaCardTitle>
         <VaCardContent class="flex-1 flex overflow-hidden">
           <ElCard class="w-full md:w-4/5" style="margin-top: 10px">
-            <p slot="header">资讯</p>
+            <template #header>
+              <p>资讯</p>
+            </template>
             <ElRow v-for="(item, index) in info.news"
                    :key="index"
                    style="margin-top: 20px">
