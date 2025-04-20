@@ -10,9 +10,7 @@
       </div>
     </td>
     <td class="va-timeline-item__date-cell">
-      <template #date>
         {{ $props.date }}
-      </template>
     </td>
   </tr>
 </template>
