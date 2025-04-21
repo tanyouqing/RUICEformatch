@@ -78,7 +78,7 @@ const formData = reactive({
 const submit = async () => {
   if (validate()) {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/auth/register', {
+      const response = await axios.post('http://47.239.17.192:80/auth/register', {
         email: formData.email,
         password: formData.password,
       })

@@ -71,7 +71,7 @@ const submit = async () => {
   if (validate()) {
     try {
       // 向后端发送登录请求
-      const response = await axios.post('http://127.0.0.1:5000/auth/login', {
+      const response = await axios.post('http://47.239.17.192:80/auth/login', {
         email: formData.email,
         password: formData.password,
       })

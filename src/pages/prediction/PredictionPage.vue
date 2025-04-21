@@ -413,7 +413,7 @@ const prediction1 = async () => {
     }
 
     // 调用 Flask 后端接口
-    const response = await fetch('http://127.0.0.1:5000/forecast', {
+    const response = await fetch('http://47.239.17.192:80/forecast', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

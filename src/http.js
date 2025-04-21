@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const httpInstance = axios.create({
-  baseURL: 'http://localhost:5000/',
+  baseURL: 'http://47.239.17.192:80/',
   headers: {
     'ngrok-skip-browser-warning': 'true', //跳过页面，可以正常请求接口
   },
