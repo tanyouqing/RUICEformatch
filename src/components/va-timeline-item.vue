@@ -6,11 +6,10 @@
       </div>
     </td>
     <td class="va-timeline-item__content-cell">
-      <div class="va-timeline-item__content">
-      </div>
+      <div class="va-timeline-item__content"></div>
     </td>
     <td class="va-timeline-item__date-cell">
-        {{ $props.date }}
+      {{ $props.date }}
     </td>
   </tr>
 </template>

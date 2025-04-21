@@ -431,7 +431,7 @@ const prediction1 = async () => {
     console.log(2)
     predictionres.value.close_price = result[0]['close_price']
     predictionres.value.volatility = result[1]['volatility']
-    predictionres.value.volatility[0] = null
+    predictionres.value.volatility[0] = 0
     // 初始化其他逻辑
     initdiv()
     islive.value = false
@@ -475,8 +475,8 @@ const initdiv = () => {
     maxValue = maxValue + chazhi
     minValue = minValue - chazhi
   }
-  maxValue = parseInt(maxValue)
-  minValue = parseInt(minValue)
+  maxValue = parseInt(maxValue?.toString() || '0')
+  minValue = parseInt(minValue?.toString() || '0')
   const option = {
     color: colors,
     tooltip: {

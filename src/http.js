@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from 'axios'
 
 const httpInstance = axios.create({
-    baseURL: 'http://localhost:5000/',
-    headers: {
-            "ngrok-skip-browser-warning": "true" //跳过页面，可以正常请求接口
-        },
-    timeout: 4e5
-});
+  baseURL: 'http://localhost:5000/',
+  headers: {
+    'ngrok-skip-browser-warning': 'true', //跳过页面，可以正常请求接口
+  },
+  timeout: 4e5,
+})
 
 // httpInstance.interceptors.response.use(res => {
 //     let data = res.data;
@@ -34,4 +34,4 @@ const httpInstance = axios.create({
 //     }
 // );
 
-export default httpInstance;
+export default httpInstance

@@ -61,7 +61,7 @@ const filteredCategories = computed(() => {
   <VaAlert v-else class="mb-4 leading-5" color="info" outline>
     No matches found. Try refining your search or browse through the categories to find the help you need.
   </VaAlert>
-  <button class="btn" @click="shuffleCategories" style="margin-bottom: 1rem;">换一批</button>
+  <button class="btn" style="margin-bottom: 1rem" @click="shuffleCategories">换一批</button>
 </template>
 
 <style>
@@ -77,7 +77,10 @@ const filteredCategories = computed(() => {
   border: 1px solid #007bff;
   border-radius: 0.25rem;
   cursor: pointer;
-  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
 }
 
 .btn:hover {

@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { resolve, dirname } from 'node:path'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite'
 import { vuestic } from '@vuestic/compiler/vite'
 
@@ -12,26 +12,21 @@ export default defineConfig({
   },
   plugins: [
     vuestic({
-      options: {
-        devtools: true,
-        cssLayers: true,
-      },
+      // 修正 vuestic 插件配置
+      devtools: true, // 移除非法的 options 层级
+      cssLayers: true,
     }),
     vue(),
     VueI18nPlugin({
       include: resolve(dirname(fileURLToPath(import.meta.url)), './src/i18n/locales/**'),
     }),
   ],
-  // 添加以下server字段用于代理配置
   server: {
     proxy: {
-      // 这里以'/api'为例，你可以根据实际后端接口的路径前缀来设置
       '/api': {
         target: 'http://localhost:8585',
-        changeover: true,
-        pathRewrite: {
-          '^/api': '',
-        },
+        changeOrigin: true, // 修正拼写错误的 changeover => changeOrigin
+        rewrite: (path) => path.replace(/^\/api/, ''), // 更规范的 rewrite 配置
       },
     },
   },

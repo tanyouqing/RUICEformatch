@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   top10List: Array,
-  default:()=>[]
+  default: () => [],
 })
 </script>
 

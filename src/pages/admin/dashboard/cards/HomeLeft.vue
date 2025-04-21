@@ -10,7 +10,10 @@ const selectedStock = ref<string | null>(null)
 
 // 修改前：直接使用 selectedStock.value 作为索引，可能存在 null 值
 // 修改后：使用可选链操作符避免直接访问可能为 null 的值
-const wholeName = computed(() => store.stockMap[selectedStock.value ?? ''])
+const wholeName = computed(() => {
+  const key = selectedStock.value ?? ''
+  return store.stockMap[key as keyof typeof store.stockMap] || '未找到股票'
+})
 
 const stockList = computed(() => Object.keys(store.stockMap))
 
@@ -41,7 +44,7 @@ const toViewStock = () => {
       <h1 class="card-title text-secondary font-bold uppercase">列表</h1>
       <div class="flex gap-1"></div>
     </VaCardTitle>
-    <VaCardContent class="flex flex-col-reverse md:flex-row  justify-between gap-5 h-full">
+    <VaCardContent class="flex flex-col-reverse md:flex-row justify-between gap-5 h-full">
       <div>
         <div style="height: 10px"></div>
         <ElRow>
@@ -62,11 +65,7 @@ const toViewStock = () => {
         <p>{{ wholeName }}</p>
 
         <ElCard shadow="hover" class="card" style="height: 300px; overflow: auto">
-          <ElRow
-            v-for="(stock, index) in stockList"
-            :key="index"
-            style="justify-content: center; margin-bottom: 10px"
-          >
+          <ElRow v-for="(stock, index) in stockList" :key="index" style="justify-content: center; margin-bottom: 10px">
             <!-- 修改前：直接将 stock 赋值给 selectedStock，类型不匹配 -->
             <!-- 修改后：显式转换类型 -->
             <ElLink @click="() => (selectedStock = stock as string)"> {{ stock }}</ElLink>

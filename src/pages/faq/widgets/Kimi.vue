@@ -1,13 +1,7 @@
 <template>
   <div class="search-container">
-    <input
-      v-model="searchQuery"
-      type="text"
-      placeholder="输入你的问题"
-      class="search-input"
-      @input="clearAnswers"
-    />
-    <button @click="search" class="search-button">搜索</button>
+    <input v-model="searchQuery" type="text" placeholder="输入你的问题" class="search-input" @input="clearAnswers" />
+    <button class="search-button" @click="search">搜索</button>
     <div v-if="loading" class="loading">加载中...</div>
     <div v-if="error" class="error">抱歉，搜索出错。</div>
     <div v-if="isEmptyMessage" class="empty-message">请输入内容后搜索</div>
@@ -16,7 +10,7 @@
         <!-- eslint-disable vue/no-v-html -->
         <div v-html="parseMarkdown(answer)"></div>
       </div>
-      <button v-if="hasMore" @click="loadMore" class="load-more-button">加载更多</button>
+      <button v-if="hasMore" class="load-more-button" @click="loadMore">加载更多</button>
     </div>
   </div>
 </template>
@@ -34,99 +28,99 @@ export default {
       hasMore: true,
       page: 1,
       pageSize: 5,
-      cache: {}
-    };
+      cache: {},
+    }
   },
   methods: {
     async search() {
-      this.error = false;
-      this.isEmptyMessage = false;
-      this.loading = true;
-      this.answers = []; // 清空上一次的回答
+      this.error = false
+      this.isEmptyMessage = false
+      this.loading = true
+      this.answers = [] // 清空上一次的回答
 
-      const trimmedQuery = this.searchQuery.trim();
+      const trimmedQuery = this.searchQuery.trim()
 
       if (trimmedQuery === '') {
-        this.isEmptyMessage = true;
-        this.loading = false;
-        return;
+        this.isEmptyMessage = true
+        this.loading = false
+        return
       }
 
       if (this.cache[trimmedQuery]) {
-        this.answers = this.cache[trimmedQuery];
-        this.updateDisplayedAnswers();
-        this.loading = false;
-        return;
+        this.answers = this.cache[trimmedQuery]
+        this.updateDisplayedAnswers()
+        this.loading = false
+        return
       }
 
       try {
-        const response = await this.fetchAnswer(trimmedQuery);
+        const response = await this.fetchAnswer(trimmedQuery)
         if (response && response.choices) {
-          const choiceContents = response.choices.map(choice => choice.message.content);
-          this.answers = this.answers.concat(choiceContents);
-          this.cache[trimmedQuery] = this.answers;
-          this.updateDisplayedAnswers();
+          const choiceContents = response.choices.map((choice) => choice.message.content)
+          this.answers = this.answers.concat(choiceContents)
+          this.cache[trimmedQuery] = this.answers
+          this.updateDisplayedAnswers()
         } else {
-          this.answers = [];
+          this.answers = []
         }
       } catch (error) {
-        this.error = true;
-        console.error('Error fetching answer:', error);
+        this.error = true
+        console.error('Error fetching answer:', error)
       }
-      this.loading = false;
+      this.loading = false
     },
     async fetchAnswer(query) {
-      const apiKey = 'sk-RqoBIoExUi2dHOHK0Fv7kyQofalZwKWzi29Dk95F4dZNANCN'; // 替换为你的 API Key
-      const url = "https://api.moonshot.cn/v1/chat/completions";
+      const apiKey = 'sk-RqoBIoExUi2dHOHK0Fv7kyQofalZwKWzi29Dk95F4dZNANCN' // 替换为你的 API Key
+      const url = 'https://api.moonshot.cn/v1/chat/completions'
       const headers = {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
-      };
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      }
 
       const data = {
-        model: "moonshot-v1-8k",
+        model: 'moonshot-v1-8k',
         messages: [
-          { role: "system", content: "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。" },
-          { role: "user", content: query }
+          { role: 'system', content: '你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。' },
+          { role: 'user', content: query },
         ],
         temperature: 0.3,
-      };
+      }
 
       try {
         const response = await fetch(url, {
           method: 'POST',
           headers: headers,
-          body: JSON.stringify(data)
-        });
-        if (!response.ok) throw new Error('Network response was not ok');
-        const result = await response.json();
-        return result;
+          body: JSON.stringify(data),
+        })
+        if (!response.ok) throw new Error('Network response was not ok')
+        const result = await response.json()
+        return result
       } catch (error) {
-        console.error('Error fetching answer:', error);
-        return { choices: [] };
+        console.error('Error fetching answer:', error)
+        return { choices: [] }
       }
     },
     updateDisplayedAnswers() {
-      this.displayedAnswers = this.answers.slice(0, this.pageSize * this.page);
+      this.displayedAnswers = this.answers.slice(0, this.pageSize * this.page)
     },
     loadMore() {
       if (this.answers.length <= this.displayedAnswers.length) {
-        this.hasMore = false;
-        return;
+        this.hasMore = false
+        return
       }
-      this.updateDisplayedAnswers();
+      this.updateDisplayedAnswers()
     },
     clearAnswers() {
-      this.answers = [];
-      this.displayedAnswers = [];
+      this.answers = []
+      this.displayedAnswers = []
     },
     parseMarkdown(markdownText) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(markdownText, 'text/html');
-      return doc.body.innerHTML;
-    }
-  }
-};
+      const parser = new DOMParser()
+      const doc = parser.parseFromString(markdownText, 'text/html')
+      return doc.body.innerHTML
+    },
+  },
+}
 </script>
 
 <style scoped>

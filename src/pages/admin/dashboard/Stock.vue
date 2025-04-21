@@ -12,23 +12,35 @@ interface StockInfo {
   pe_ratio: number
   volume: number
   daily_data: any[]
-  [key: string]: any
+  [key: string]: any // 允许动态属性
 }
 
 interface IndexItem {
-  index_name: string
+  index_name: keyof typeof key2text // 严格限制为 key2text 的键
   value: number | string
 }
 
 const route = useRoute()
-const stock_info = reactive<StockInfo>({})
+
+// 初始化时提供所有必填属性的默认值
+const stock_info = reactive<StockInfo>({
+  current_price: 0,
+  growth_amount: 0,
+  growth_rate: 0,
+  market_cap: 0,
+  pe_ratio: 0,
+  volume: 0,
+  daily_data: [],
+})
+
 const formed_indices = reactive<{
   list: IndexItem[]
 }>({
   list: [],
 })
 
-const key2text = {
+// 添加类型声明允许字符串索引
+const key2text: Record<string, string> = {
   current_price: 'Current Price ( $)',
   growth_amount: 'Growth Amount',
   growth_rate: 'Growth Rate',
@@ -39,35 +51,31 @@ const key2text = {
 
 onMounted(async () => {
   console.log('Stock page mounted')
-  // 修改前：stock_info = (await httpInstance.get(`${route.query.ticker}`)).data
-  // 修改后：明确指定类型为 StockInfo
-  const response = await httpInstance.get<StockInfo>(`${route.query.ticker}`)
-  Object.assign(stock_info, response.data)
 
-  console.log('stock_info: ', stock_info)
+  try {
+    const response = await httpInstance.get<StockInfo>(`${route.query.ticker}`)
+    Object.assign(stock_info, response.data)
 
-  for (const key in stock_info) {
-    if (key === 'daily_data') {
-      continue
-    }
-    // 修改前：formed_indices.list.push(...)
-    // 修改后：明确指定数组类型
-    formed_indices.list.push({
-      index_name: key,
-      // 修改前：stock_info[key] 可能是未定义属性
-      // 修改后：通过接口定义确保属性存在
-      value: key === 'market_cap' ? (stock_info.market_cap / 1e9).toFixed(3) : Number(stock_info[key].toFixed(3)),
+    console.log('stock_info: ', stock_info)
+
+    // 过滤有效键值
+    const validKeys = Object.keys(key2text)
+    formed_indices.list = Object.entries(stock_info)
+      .filter(([key]) => validKeys.includes(key))
+      .map(([key, value]) => ({
+        index_name: key as keyof typeof key2text,
+        value: key === 'market_cap' ? (Number(value) / 1e9).toFixed(3) : Number(value).toFixed(3),
+      }))
+
+    await nextTick(() => {
+      const dom = document.getElementById('k_chart')
+      if (dom && stock_info.daily_data) {
+        render_Kline(dom, stock_info.daily_data, `${route.query.ticker}`)
+      }
     })
+  } catch (error) {
+    console.error('Error fetching stock data:', error)
   }
-
-  await nextTick(() => {
-    const dom = document.getElementById('k_chart')
-    if (dom) {
-      // 修改前：stock_info.daily_data 可能不存在
-      // 修改后：通过接口定义确保属性存在
-      render_Kline(dom, stock_info.daily_data, `${route.query.ticker}`)
-    }
-  })
 })
 </script>
 
@@ -88,15 +96,11 @@ onMounted(async () => {
           border
           style="margin-top: 10px"
         >
-          <!-- 修改前：item 可能是 never 类型 -->
-          <!-- 修改后：通过接口定义确保 item 有正确类型 -->
-          <ElDescriptionsItem
-            v-for="item in formed_indices.list"
-            :key="item.index_name"
-            align="center">
+          <ElDescriptionsItem v-for="item in formed_indices.list" :key="item.index_name" align="center">
             <template #label>
               <div class="cell-item" style="width: 130px">
-                {{ key2text[item.index_name] }}
+                {{ key2text[item.index_name] || 'Unknown' }}
+                <!-- 添加安全兜底 -->
               </div>
             </template>
             {{ item.value }}

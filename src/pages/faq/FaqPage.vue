@@ -4,13 +4,13 @@
     <Categories />
     <Questions />
     <div class="center-button">
-      <button @click="toggleModal" class="open-modal-button">AI助手</button>
+      <button class="open-modal-button" @click="toggleModal">AI助手</button>
     </div>
 
     <div v-if="isModalVisible" class="modal-overlay">
       <div class="modal">
-        <button @click="toggleModal" class="close-modal-button">X</button>
-        <kimi />
+        <button class="close-modal-button" @click="toggleModal">X</button>
+        <Kimi />
       </div>
     </div>
   </div>
@@ -55,7 +55,7 @@ function toggleModal() {
 }
 
 .open-modal-button:hover {
-/*  background-color: #45a049;*/
+  /*  background-color: #45a049;*/
 }
 
 .modal-overlay {

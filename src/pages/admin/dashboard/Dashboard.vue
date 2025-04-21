@@ -43,9 +43,7 @@ onMounted(async () => {
             <template #header>
               <p>资讯</p>
             </template>
-            <ElRow v-for="(item, index) in info.news"
-                   :key="index"
-                   style="margin-top: 20px">
+            <ElRow v-for="(item, index) in info.news" :key="index" style="margin-top: 20px">
               {{ index + 1 + '. ' + item }}<br />
             </ElRow>
           </ElCard>

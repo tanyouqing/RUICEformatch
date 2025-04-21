@@ -62,12 +62,16 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
     })
 
     const tableBody = document.createElement('tbody')
-    bodyLines.forEach((body: any, i: string | number) => {
-      const colors = tooltip.labelColors[i]
-
+    bodyLines.forEach((body, i) => {
+      // 修改点1：确保i是number类型
+      // 修改点2：添加类型断言并使用可选链操作符
+      const colors = (tooltip.labelColors as unknown as Array<{ backgroundColor: string; borderColor: string }>)?.[i]
       const span = document.createElement('span')
-      span.style.background = String(colors.backgroundColor)
-      span.style.borderColor = String(colors.borderColor)
+      if (colors) {
+        // 修改点3：添加类型检查
+        span.style.background = colors.backgroundColor
+        span.style.borderColor = colors.borderColor
+      }
       span.style.borderWidth = '2px'
       span.style.marginRight = '10px'
       span.style.height = '10px'
@@ -81,7 +85,7 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
       const td = document.createElement('td')
       td.style.borderWidth = '0'
 
-      const text = document.createTextNode(body as any)
+      const text = document.createTextNode(body)
 
       td.appendChild(span)
       td.appendChild(text)
@@ -105,7 +109,6 @@ export const externalTooltipHandler = (context: { chart: Chart; tooltip: Tooltip
   tooltipEl.style.opacity = '1'
   tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px'
 
-  // @ts-expect-error fix
   computePosition(chart.canvas.parentNode! as HTMLElement, tooltipEl!, {
     placement: 'top',
     middleware: [flip(), shift()],

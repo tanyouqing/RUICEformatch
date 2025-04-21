@@ -1,6 +1,5 @@
 <template>
-  <div ref="editorElement" class="va-medium-editor content">
-  </div>
+  <div ref="editorElement" class="va-medium-editor content"></div>
 </template>
 
 <script lang="ts" setup>
